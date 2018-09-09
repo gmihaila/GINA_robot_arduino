@@ -1,0 +1,5 @@
+http://www.kuka-robotics.com/en/products/software/educational_framework/arm_tutorials/PS_Content_Arm2.htm
+
+http://stackoverflow.com/questions/18810973/robot-arm-programming-transformation-of-coordinate-system
+
+http://www.csc.kth.se/~chek/teaching/EL2310/coursework/matlab_project/matlab_project.html

@@ -1,0 +1,8 @@
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\bin\Release\LEDComm1.exe
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\bin\Release\LEDComm1.pdb
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\ResolveAssemblyReference.cache
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\WindowsFormsApplication1.Form1.resources
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\WindowsFormsApplication1.Properties.Resources.resources
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\LEDComm1.csproj.GenerateResource.Cache
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\LEDComm1.exe
+C:\Jesse\C# Programs\LEDComm1\LEDComm1\obj\Release\LEDComm1.pdb

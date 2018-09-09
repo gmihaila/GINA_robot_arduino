@@ -1,0 +1,30 @@
+http://www.instructables.com/id/Interfacing-your-arduino-with-a-C-program/step3/Using-the-serial-port-in-code/
+
+Other Stuff (at the top?!)
+
+serialPort1.Open();  - Opens the serial port for you to use. There will be a big nasty error if the port is already opened, or if the port is not there.
+
+serialPort1.BytesToRead - use an if statement to compare to 0. If the result is false, then there is serial data available (if(serialPort1.BytesToRead == 0) is the same as for arduino if(Serial.available))
+
+Talking to the Arduino
+
+serialPort1.Write(arg); - Tells the arduino something, where arg is what you want it to say. There will be a big nasty error if the port is not opened.
+
+serialPort1.WriteLine(arg); - same as serialPort1.Write(arg); but always adds "\n".
+
+Reading from the Arduino
+
+string read = serialPort1.ReadTo(arg); - Reads the serial data, until the text in arg is found, then is returned as read. Also will have an error if the port is not opened.
+
+string read = serialPort1.ReadLine(); - Same as serialPort1.ReadTo("\n");
+
+string read  = serialPort1.ReadToEnd(); - Keeps reading until there is no more data to read, then is returned as string read.
+
+
+
+code
+http://www.codeproject.com/Articles/473828/Arduino-Csharp-and-Serial-Interface
+
+http://playground.arduino.cc/Csharp/SerialCommsCSharp
+
+http://playground.arduino.cc/Interfacing/Csharp

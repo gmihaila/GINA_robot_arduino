@@ -1,0 +1,486 @@
+    // http://forum.arduino.cc/index.php/topic,48324.0.html
+    
+    //display
+    #include <Wire.h>
+    #include <LCD.h>
+    #include <LiquidCrystal_I2C.h>
+    #define I2C_ADDR    0x27  
+    //dfinire variabila LCD
+    LiquidCrystal_I2C	lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); 
+    //citire analogica PIN
+    int analogPin1 = 0;  // analog pin used to connect the potentiometer
+    int analogPin2 = 1;  // analog pin used to connect the potentiometer
+    int analogPin3 = 2;  // analog pin used to connect the potentiometer
+    
+   //initializare pini comanda SERVOMOTOARE
+    #define servoPin1 2
+    #define servoPin2 4
+    #define servoPin3 7
+      
+   //initializare pini dirvere motoare DC
+    #define In1  3
+    #define In2  5
+    #define In3  6
+    #define In4  9
+    #define In10  10
+    #define In11  11
+    
+   //initializare viteza PORT SERIAL
+    #define BAUD_RATE 9600
+    
+   //initializare viariabile GLOBALE
+   //potentiometre
+      int val1 = 0;
+      int val2 = 0;
+      int val3 = 0;
+   //viteza motoare DC valoare PWM
+      int pwm = 140;    
+   //coordonate initiale motor
+      int br1 = 100;
+      int br2 = 90;
+      int br3 = 90;
+   //intiare motoare servo   
+      int serv1 = 60;  //rotatie servo
+      int serv2 = 60;  //rotatie servo
+      int serv3 = 60;  //rotatie servo
+    //trimite date
+    String msg;
+    void setup()
+    {
+      //initializare LCD
+      lcd.begin (16,2);
+      lcd.home ();                  
+      lcd.print("Buna! Eu sunt");  
+      lcd.setCursor ( 0, 1 );        
+      lcd.print("Gina !"); 
+     //SERVOMOTOARE
+      pinMode(servoPin1, OUTPUT);
+      pinMode(servoPin2, OUTPUT);
+      pinMode(servoPin3, OUTPUT);
+     //drivere motoare DC
+      pinMode(In1, OUTPUT);
+      pinMode(In2, OUTPUT);
+      pinMode(In3, OUTPUT);
+      pinMode(In4, OUTPUT);
+      pinMode(In10, OUTPUT);
+      pinMode(In11, OUTPUT);
+     //comunicare SERIALA
+      Serial.begin(BAUD_RATE);          //  setup serial
+    }
+    
+    void loop()
+    {
+      
+      
+      //Comanda GUI c#
+     msg = String(br1)+'a'+String(br2)+'a'+String(br3)+'a'+String(serv1)+'a'+String(serv2)+'a'+String(serv3)+'a';
+     Serial.println(msg);     //ce printez din C#
+     delay(10);
+   
+      char incomingChar = Serial.read();  //ce vine din c#
+      delay(10);
+      
+      switch(incomingChar)
+   {
+     //brat1UP_click
+     case '/':
+     {
+       br1+=2;
+       Brat1(br1);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //brat1DOWN_click
+     case '-':
+     {
+       br1-=2;
+       Brat1(br1);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //brat2DOWN_click
+     case '|':
+     {
+       br2-=2;
+       Brat2(br2);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //brat2UP_click
+     case '+':
+     {
+       br2+=2;
+       Brat2(br2);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //brat3UP_click
+     case '*':
+     {
+       br3+=3;
+       Brat3(br3);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //brat3DOWN_click
+     case '&':
+     {
+       br3-=3;
+       Brat3(br3);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //buton1_click "Conectare"
+     case '~':
+     {
+       br1 = 106;
+       br2 = 90;
+       br3 = 87;
+       serv1 = 90;
+       serv2 = 120;
+       serv3 = 90;
+       Brat1(br1);
+       Brat2(br2);
+       Brat3(br3);
+       ServoMotor(servoPin1, serv1);
+       ServoMotor(servoPin2, serv2);
+       ServoMotor(servoPin3, serv3);
+       Stop();
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //ghiaraSTR_click
+     case '@':
+     {
+       serv3+=5;
+       if(serv3>0 && serv3<180)
+       {
+         ServoMotor(servoPin3, serv3);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //ghiaraELIB_click
+     case '#':
+     {
+       serv3-=10;
+       if(serv3>0 && serv3<180)
+       {
+         ServoMotor(servoPin3, serv3);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //rotatie ghiara LEFT
+     case '^':
+     {
+       serv2+=3;
+       if(serv2>0 && serv2<180)
+       {
+         ServoMotor(servoPin2, serv2);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //rotatie ghiara RIGHT
+     case '%':
+     {
+       serv2-=5;
+       if(serv2>0 && serv2<180)
+       {
+         ServoMotor(servoPin2, serv2);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //rotatie brat LEFT
+     case '`':
+     {
+       serv1 = serv1 -5;
+       if(serv1>0 && serv1<180)
+       {
+         ServoMotor(servoPin1, serv1);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //rotatie brat RIGHT
+     case '!':
+     {
+       serv1 = serv1 +3;
+       if(serv1>0 && serv1<180)
+       {
+         ServoMotor(servoPin1, serv1);
+         Stop();
+       }
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+     //afisare date
+     case '<':
+     {
+       Afisare( serv1, br1, br2, br3, serv2, serv3);
+       break;
+     }
+
+    
+   }
+   
+  
+    
+      //Comanda GUIc#
+      
+ //-------Comanda miscare automata-------
+//      Miscare(93, 158, 130, 90, 114, 80);
+//      Miscare(93, 158, 130, 90, 114, 125);
+//      Miscare(93, 106, 130, 90, 114, 125);
+//      Miscare(112, 106, 130, 90, 114, 125);
+//      Miscare(112, 156, 130, 90, 114, 80);
+//      Miscare(112, 104, 130, 90, 114, 80);
+//      Miscare(91, 104, 130, 90, 114, 80);
+//      Miscare(91, 158, 130, 90, 114, 125);
+    }
+    
+    
+    
+    //Functie brat1
+    void Brat1(int poz1)
+    {
+        poz1 = map(poz1 , 0 , 179,0 , 1023);   // scale it to use it with the servo (value between 0 and 180) 
+        val1 = analogRead(0);         // reads the value of the potentiometer (value between 0 and 1023) 
+        delay(0.02);
+      
+      while(poz1 > val1)
+      {
+        
+         motorForward('brat1' , pwm);
+         delay(1);
+         val1 = analogRead(0);
+         delay(0.02);
+       
+      }
+       
+       while(poz1 < val1) 
+       {
+          motorBackward('brat1' , pwm);
+          delay(1);
+          val1 = analogRead(0);
+          delay(0.02);
+       }
+       
+       
+      }
+      
+      
+      
+      
+    //Functie brat2
+    void Brat2(int poz2)
+    {
+      poz2 = map(poz2 , 0 , 179,0 , 1023);
+      val2 = analogRead(analogPin2);
+      delay(0.02);
+      
+      while(poz2 > val2)
+      {
+        
+         motorForward('brat2' , pwm);
+         delay(1);
+         val2 = analogRead(analogPin2);
+         delay(0.02);
+       
+      }
+       
+       while(poz2 < val2) 
+       {
+         motorBackward('brat2' , pwm);
+         delay(1);
+         val2 = analogRead(analogPin2);
+         delay(0.02);
+       }
+       
+       
+      }
+      
+     
+     void Brat3(int poz3)
+    {
+       poz3 = map(poz3 , 0 , 179,0 , 1023);
+       val3 = analogRead(2);
+       delay(0.02);
+       
+      while(poz3 > val3)
+      {
+        
+         motorForward('brat3' , pwm-50);
+         delay(1);
+         val3 = analogRead(2);
+         delay(0.02);
+      }
+       
+       while(poz3 < val3) 
+       {
+         motorBackward('brat3' , pwm-50);
+         delay(1);
+         val3 = analogRead(2);
+         delay(0.02);
+       }
+       
+       
+      }
+      
+      
+      
+    
+    //FUNCTII MOTOR
+    
+    void motorBackward(char tip , int PWM_val)  { 
+    switch (tip)
+    {
+      case 'brat1':
+      {
+        analogWrite(In1, PWM_val);
+        digitalWrite(In2, LOW);
+        digitalWrite(In3, LOW);
+        digitalWrite(In4, LOW);
+        digitalWrite(In10, LOW);
+        digitalWrite(In11, LOW);
+        break;
+      }
+      case 'brat2':
+      {
+        analogWrite(In3, PWM_val);
+        digitalWrite(In1, LOW);
+        digitalWrite(In2, LOW);
+        digitalWrite(In4, LOW);
+        digitalWrite(In10, LOW);
+        digitalWrite(In11, LOW);
+        break;
+      }
+      case 'brat3':
+      {
+        analogWrite(In10, PWM_val);
+        digitalWrite(In1, LOW);
+        digitalWrite(In2, LOW);
+        digitalWrite(In3, LOW);
+        digitalWrite(In4, LOW);
+        digitalWrite(In11, LOW);
+        break;
+      }
+      
+    } 
+    }
+    
+    void motorForward(char tip , int PWM_val)  {
+      switch(tip)
+      {
+        case 'brat1':
+        {
+           analogWrite(In2, PWM_val);
+           digitalWrite(In1, LOW);
+           digitalWrite(In3, LOW);
+           digitalWrite(In4, LOW);
+           digitalWrite(In10, LOW);
+           digitalWrite(In11, LOW);
+           break;
+        }
+        case 'brat2':
+        {
+           analogWrite(In4, PWM_val);
+           digitalWrite(In1, LOW);
+           digitalWrite(In2, LOW);
+           digitalWrite(In3, LOW);
+           digitalWrite(In10, LOW);
+           digitalWrite(In11, LOW);
+           break;
+        }
+        case 'brat3':
+      {
+        analogWrite(In11, PWM_val);
+        digitalWrite(In1, LOW);
+        digitalWrite(In2, LOW);
+        digitalWrite(In3, LOW);
+        digitalWrite(In4, LOW);
+        digitalWrite(In10, LOW);
+        break;
+      }
+      }
+      
+    }
+    void Stop()
+    {
+        digitalWrite(servoPin1 , LOW);
+        digitalWrite(servoPin2 , LOW);
+        digitalWrite(servoPin3 , LOW);
+        digitalWrite(In1, LOW);
+        digitalWrite(In2, LOW);
+        digitalWrite(In3, LOW);
+        digitalWrite(In4, LOW);
+        digitalWrite(In10, LOW);
+        digitalWrite(In11, LOW);
+    }
+    
+    //Functie motoare servo
+    void ServoMotor(int pin , int grade)
+    {
+      grade = map(grade, 0 , 180, 0 , 2000);
+     
+     
+      digitalWrite(pin, HIGH);
+      delayMicroseconds(grade);
+      digitalWrite(pin, LOW);
+      delayMicroseconds(20000-grade);
+     
+     digitalWrite(pin, LOW);
+     delay(10);
+      
+    }
+    
+    //Functie afisare
+    void Afisare(int cord1, int cord2, int cord3,  int cord4, int cord5, int cord6)
+    {
+      lcd.clear();
+      lcd.home ();                  
+      lcd.print("1-");
+      lcd.print(cord1);
+      lcd.setCursor(5,0);
+      lcd.print("2-");
+      lcd.print(cord2);
+      lcd.setCursor(11,0);
+      lcd.print("3-");
+      lcd.print(cord3);
+      lcd.setCursor(0,1);
+      lcd.print("4-");
+      lcd.print(cord4);
+      lcd.setCursor(5,1);
+      lcd.print("5-");
+      lcd.print(cord5);
+      lcd.setCursor(11,1);
+      lcd.print("6-");
+      lcd.print(cord6);
+      delay(50);
+    }
+    
+    //Functie miscare coordonate
+    void Miscare(int b1 , int b2 , int b3 , int b4 , int b5 , int b6)
+    {
+      ServoMotor(servoPin1, b1);
+      Brat1(b2);
+      Brat2(b3);
+      Brat3(b4);
+      ServoMotor(servoPin2, b5);
+      ServoMotor(servoPin3, b6);
+      Stop();
+      Afisare(b1, b2, b3, b4, b5, b6);
+    }
