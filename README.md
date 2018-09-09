@@ -23,7 +23,7 @@
 
 ### Pictures:
 #### Building
-![alt text](https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_0982.JPG){:height="50%" width="50%"}
+![alt text](https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_0982.JPG){:height="10%" width="10%"}
 
 ![alt text](https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_0984.JPG =250x250) 
 
