@@ -39,5 +39,7 @@
 
 <img src="https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_2412.JPG" width="30%" height="30%"> <img src="https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_2404.JPG" width="30%" height="30%">
 
-
+<br>
+## Thank you for your interest!
+### GeorgeM.
 
