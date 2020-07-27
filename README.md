@@ -1,5 +1,8 @@
 ## GINA Custom Robot Arm  [Hobby Project]
 
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![Ask Me Anything !](https://img.shields.io/badge/Updated-July,2020-1abc9c.svg)](https://GitHub.com/Naereen/ama)
+
 ### <img src="http://files.softicons.com/download/social-media-icons/sociocons-icons-by-rohit-tripathi/ico/youtube-sociocon.ico" width="4%" height="4%"> See it on youtube:
 * [Final Version](https://www.youtube.com/watch?v=G8VukfmtD_w&t=67s)
 
@@ -40,6 +43,7 @@
 <img src="https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_2412.JPG" width="30%" height="30%"> <img src="https://raw.githubusercontent.com/gmihaila/GINA_robot_arduino/master/Documentation/pics/IMG_2404.JPG" width="30%" height="30%">
 
 <br></br>
-## Thank you for your interest!
-### GeorgeM.
+## Purpose
+
+This was a hobby project built from scratch by me during my undergrad. Its main purpose was to gain personal experience in robotics.
 
